@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <dlfcn.h>
 
@@ -19,6 +20,7 @@ int store_login_details(const char *username, const char *password, const char *
         fprintf(stderr, "\n\rfailed to connect to db\n\r");
         return 1;
     }
+    chmod(databaseFile, S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH);
 
     //Create the table
     sqlite3_stmt *stmt = NULL;
