@@ -1,25 +1,25 @@
-#SSH PAM Login Logger
+# SSH PAM Login Logger
 
 This PAM module rejects any login attempts and logs the credentials that have been attempted. The module has extremely limited testing and should be used at your own risk.
 
 The intention of this module is to act as a honeypot, capturing login credentials and disallowing the login.
 
-##Requirements
+## Requirements
 
 The module relies on the following 2 dev packages to compile:
 
-*libsqlite3-dev
-*libpam0g-dev
+* libsqlite3-dev
+* libpam0g-dev
 
 The module also logs to SQLite, therefore, the following package is required:
 
-*sqlite3
+* sqlite3
 
-##Compilation
+## Compilation
 
 I have not provided a make file for this project however I have included a shell script (compile.sh) which compiles the project. You may need to modify paths to get this to work for you.
 
-##Installation
+## Installation
 
 After compiling, ssh_honeypot.so will be placed into /lib/security/, this will make the module available to PAM.
 
@@ -32,7 +32,7 @@ session    required     ssh_honeypot.so
 password   required     ssh_honeypot.so
 ```
 
-##Testing
+## Testing
 
 To ensure this is working try connecting to SSH `ssh 127.0.0.1`, attempt to log in.
 
@@ -62,7 +62,7 @@ Jan 27 01:56:49 Dev-Laptop sshd[4946]: Connection closed by authenticating user 
 
 If the module is working you will not see the first 2 lines. The first line tries to give an indication of a problem.
 
-###What Next
+### What Next
 
 1. Remove hardcoded link to the location of the database file.
 2. Create a make file.
