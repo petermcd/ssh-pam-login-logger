@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "pam_appl.h": "c",
+        "pam_modules.h": "c",
+        "pam_ext.h": "c",
+        "sqlite3.h": "c",
+        "string.h": "c",
+        "stdio.h": "c"
+    }
+}
