@@ -3,9 +3,9 @@ ssh_honeypot.so :
 	cc -shared  ssh_honeypot.o -lsqlite3 -o ssh_honeypot.so
 
 install :
-	mkdir /lib/security/
+	mkdir -p /lib/security/
 	cp ssh_honeypot.so /lib/security/ssh_honeypot.so
 
 clean :
-	rm ssh_honeypot.so
-	rm ssh_honeypot.o
+	rm -f ssh_honeypot.so
+	rm -f ssh_honeypot.o
