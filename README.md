@@ -11,17 +11,20 @@ The module relies on the following 2 dev packages to compile:
 * libsqlite3-dev
 * libpam0g-dev
 
-The module also logs to SQLite, therefore, the following package is required:
+As the module logs to SQLite the following package is also required:
 
 * sqlite3
 
-## Compilation
+## Insallation
 
-I have not provided a make file for this project however I have included a shell script (compile.sh) which compiles the project. You may need to modify paths to get this to work for you.
+To compile and install the Pam module the following steps should be taken:
 
-## Installation
+```bash
+make
+make install
+```
 
-After compiling, ssh_honeypot.so will be placed into /lib/security/, this will make the module available to PAM.
+After installation, ssh_honeypot.so will be placed into /lib/security/, this will make the module available to PAM.
 
 To configure PAM, first, locate the configuration file for the service in question. This is likely located in /etc/pam.d/. The file will be named after the service such as sshd. Place the following content into the file:
 
@@ -34,7 +37,7 @@ password   required     ssh_honeypot.so
 
 ## Testing
 
-To ensure this is working try connecting to SSH `ssh 127.0.0.1`, attempt to log in.
+To ensure this is working try connecting to SSH `ssh 127.0.0.1` and attempt to log in.
 
 Once login fails run the following commands:
 
@@ -43,13 +46,13 @@ sqlite3 /var/log/login-attempts.db
 select * from logins;
 ```
 
-You should see the login attempts that you have made. In the event that you cannot see any output check the following file:
+You should see the login attempts that you have just made. In the event that you cannot see any output check the following file:
 
 ```
 /var/log/auth.log
 ```
 
-This should give details on what the problem is. For example:
+This should give details on what problem occurred. For example:
 
 ```
 Jan 27 01:56:45 Dev-Laptop sshd[4946]: PAM unable to dlopen(ssh_honeypot.so): /lib/security/ssh_honeypot.so: cannot open shared object file: No such file or directory
@@ -65,5 +68,3 @@ If the module is working you will not see the first 2 lines. The first line trie
 ### What Next
 
 1. Remove hardcoded link to the location of the database file.
-2. Create a make file.
-3. Make cross-platform.
