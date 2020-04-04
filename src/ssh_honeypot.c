@@ -28,7 +28,7 @@ int store_login_details(const char *username, const char *password, const char *
     error = sqlite3_prepare(handler, createDatabaseSQL, -1, &stmt, 0);
     sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    
+
     //Insert the details
     stmt = NULL;
     const char *sql = "INSERT INTO logins (username, password, host) VALUES (?, ?, ?);";
@@ -41,7 +41,7 @@ int store_login_details(const char *username, const char *password, const char *
 
     error = sqlite3_bind_text(stmt, 1, username, strlen(username), SQLITE_STATIC);
     if(error){
-        fprintf(stderr, "failecd to assign username\n");
+        fprintf(stderr, "failed to assign username\n");
         fprintf(stderr, "%s", sqlite3_errmsg(handler));
         return 1;
     }
@@ -58,7 +58,7 @@ int store_login_details(const char *username, const char *password, const char *
     if (strlen(host) > 0) {
         error = sqlite3_bind_text(stmt, 3, host, strlen(host), SQLITE_STATIC);
         if(error){
-            fprintf(stderr, "failecd to assign host\n");
+            fprintf(stderr, "failed to assign host\n");
             fprintf(stderr, "%s", sqlite3_errmsg(handler));
             return 1;
         }
@@ -79,13 +79,13 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
 
     pam_code = pam_get_user(pamh, &username, "USERNAME: ");
     if(pam_code != PAM_SUCCESS){
-        fprintf(stderr, "Unable to retrive username");
+        fprintf(stderr, "Unable to retrieve username");
         return PAM_PERM_DENIED;
     }
 
     pam_code = pam_get_authtok(pamh, PAM_AUTHTOK, &password, "PASSWORD: ");
     if(pam_code != PAM_SUCCESS){
-        fprintf(stderr, "Unable to retrive PASSWORD");
+        fprintf(stderr, "Unable to retrieve password");
         return PAM_PERM_DENIED;
     }
 
