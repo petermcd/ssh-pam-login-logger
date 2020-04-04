@@ -1,6 +1,6 @@
 # SSH PAM Login Logger
 
-This PAM module rejects any login attempts and logs the credentials that have been attempted. The module has extremely limited testing and should be used at your own risk.
+This PAM module rejects any login attempts logging the credentials that have been attempted. The module has extremely limited testing and should be used at your own risk.
 
 The intention of this module is to act as a honeypot, capturing login credentials and disallowing the login.
 
@@ -17,11 +17,11 @@ As the module logs to SQLite the following package is also required:
 
 ## Insallation
 
-To compile and install the Pam module the following steps should be taken:
+To compile and install the PAM module the following steps should be taken:
 
 ```bash
 make
-make install
+sudo make install
 ```
 
 After installation, ssh_honeypot.so will be placed into /lib/security/, this will make the module available to PAM.
@@ -37,7 +37,7 @@ password   required     ssh_honeypot.so
 
 ## Testing
 
-To ensure this is working try connecting to SSH `ssh 127.0.0.1` and attempt to log in.
+To ensure this is working, enable PAM authentication for the required services, pointint the configuration file at /lib/security/ssh_honeypot.so. Try logging into the service.
 
 Once login fails run the following commands:
 
